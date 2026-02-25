@@ -26,7 +26,8 @@
 
      ;; Timing
      (log/with-timing :info :component/op \"msg\" (body))"
-  (:require [taoensso.trove :as trove]))
+  (:require [taoensso.trove :as trove])
+  #?(:cljs (:require-macros [replikativ.logging])))
 
 (defmacro trace
   ([msg]
@@ -97,14 +98,15 @@
 (defmacro with-timing
   "Execute body and log duration at specified level. Returns the result of body."
   [level id msg & body]
-  `(let [start# (System/nanoTime)
-         result# (do ~@body)
-         duration-ms# (/ (- (System/nanoTime) start#) 1e6)]
-     (trove/log! {:level ~level
-                  :id ~id
-                  :msg ~msg
-                  :data {:duration-ms duration-ms#}})
-     result#))
+  (let [cljs? (:ns &env)]
+    `(let [start# ~(if cljs? `(js/performance.now) `(/ (System/nanoTime) 1e6))
+           result# (do ~@body)
+           duration-ms# (- ~(if cljs? `(js/performance.now) `(/ (System/nanoTime) 1e6)) start#)]
+       (trove/log! {:level ~level
+                    :id ~id
+                    :msg ~msg
+                    :data {:duration-ms duration-ms#}})
+       result#)))
 
 (defmacro debug-timing
   "Execute body and log duration at DEBUG level."
