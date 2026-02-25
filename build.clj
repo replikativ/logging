@@ -24,7 +24,11 @@
                 :lib lib
                 :version version
                 :basis basis
-                :src-dirs ["src"]})
+                :src-dirs ["src"]
+                :pom-data [[:licenses
+                            [:license
+                             [:name "Apache 2.0 License"]
+                             [:url "http://www.apache.org/licenses/LICENSE-2.0"]]]]})
   (b/copy-dir {:src-dirs ["src" "resources"]
                :target-dir class-dir})
   (b/jar {:class-dir class-dir
