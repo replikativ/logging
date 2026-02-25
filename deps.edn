@@ -1,0 +1,10 @@
+{:paths ["src"]
+ :deps {org.clojure/clojure {:mvn/version "1.12.4"}
+        com.taoensso/trove {:mvn/version "1.1.0"}}
+ :aliases {:build  {:deps {io.github.clojure/tools.build          {:mvn/version "0.10.12"}
+                           slipset/deps-deploy                    {:mvn/version "0.2.2"}
+                           io.github.borkdude/gh-release-artifact {:git/sha "4a9a74f" :git/tag "v0.2.1"}
+                           babashka/babashka.curl                 {:mvn/version "0.1.2"}
+                           babashka/fs                            {:mvn/version "0.5.31"}
+                           cheshire/cheshire                      {:mvn/version "6.1.0"}}
+                    :ns-default build}}}
